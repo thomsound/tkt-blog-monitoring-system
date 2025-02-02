@@ -1,0 +1,14 @@
+spring:
+  application.name: blog-fetcher
+
+  config.import: "optional:classpath:/application-secrets.yml"
+
+  kafka:
+    topic-name-blog-post-updates: blog-post-updates
+    producer:
+      bootstrap-servers: localhost:9092
+      key-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
+
+app:
+  blog-base-url: https://224f0437-be05-466e-ae23-de9090fd3b65.mock.pstmn.io
