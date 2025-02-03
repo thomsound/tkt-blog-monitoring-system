@@ -1,6 +1,5 @@
 package de.thomsound.blog_post_processor.repository;
 
-import de.thomsound.blog_post_processor.model.Post;
 import org.springframework.stereotype.Repository;
 
 import java.util.HashMap;
@@ -23,12 +22,16 @@ public class WordCountRepository {
         return counts;
     }
 
-    public void applyDelta(Post post, Map<String, Integer> wordCountDelta) {
-        this.wordCountsById.merge(post.id(), new HashMap<>(wordCountDelta), (prev, delta) -> {
+    public void applyDelta(Integer postId, Map<String, Integer> wordCountDelta) {
+        this.wordCountsById.merge(postId, new HashMap<>(wordCountDelta), (prev, delta) -> {
             mergeWordCountMaps(prev, delta);
             return prev;
         });
         mergeWordCountMaps(this.wordCountsTotal, wordCountDelta);
+
+        if(wordCountsById.get(postId).isEmpty()) {
+            wordCountsById.remove(postId);
+        }
     }
 
     private void mergeWordCountMaps(Map<String, Integer> map, Map<String, Integer> delta) {

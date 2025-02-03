@@ -1,6 +1,7 @@
 package de.thomsound.blog_fetcher.service;
 
-import de.thomsound.blog_fetcher.model.Post;
+import de.thomsound.blog_fetcher.domain.Post;
+import de.thomsound.blog_fetcher.repository.PostTrackingRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -8,10 +9,7 @@ import org.springframework.web.reactive.function.client.WebClient;
 import reactor.core.publisher.Flux;
 
 import java.text.SimpleDateFormat;
-import java.util.Date;
-import java.util.List;
-import java.util.Optional;
-import java.util.TimeZone;
+import java.util.*;
 
 
 @Service
@@ -22,8 +20,24 @@ public class BlogPostFetcher {
 
     private Date lastPoll = null;
 
-    public BlogPostFetcher(WebClient webClient) {
+    private PostTrackingRepository repository;
+
+    public BlogPostFetcher(WebClient webClient, PostTrackingRepository repository) {
         this.webClient = webClient;
+        this.repository = repository;
+    }
+
+    public Flux<Integer> fetchStalePostIds() {
+        List<Integer> ids = fetchPages(1, Optional.empty(), List.of("id"))
+                .map(Post::id)
+                .collectList()
+                .block();
+
+        Set<Integer> currentPostIds = ids == null ? Set.of() : new HashSet<>(ids);
+
+        Set<Integer> stalePostIds = repository.prune(currentPostIds);
+
+        return Flux.fromIterable(stalePostIds);
     }
 
     public Flux<Post> fetchPosts() {
@@ -45,7 +59,7 @@ public class BlogPostFetcher {
                 .uri(uriBuilder -> uriBuilder
                         .path("/wp-json/wp/v2/posts")
                         .queryParam("page", page)
-                        .queryParam("_fields", String.join(",",fields))
+                        .queryParam("_fields", String.join(",", fields))
                         .queryParamIfPresent("modified_after", after)
                         .build())
 

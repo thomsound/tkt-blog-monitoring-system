@@ -1,4 +1,4 @@
-package de.thomsound.blog_fetcher.model;
+package de.thomsound.blog_fetcher.domain;
 
 public record Title(String rendered) {
 

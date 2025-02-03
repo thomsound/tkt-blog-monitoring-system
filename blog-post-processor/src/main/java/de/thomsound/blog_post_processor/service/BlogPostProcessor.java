@@ -1,7 +1,7 @@
 package de.thomsound.blog_post_processor.service;
 
 import de.thomsound.blog_post_processor.WordCountUpdateEvent;
-import de.thomsound.blog_post_processor.model.Post;
+import de.thomsound.blog_post_processor.domain.Post;
 import de.thomsound.blog_post_processor.repository.WordCountRepository;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.stereotype.Service;
@@ -23,18 +23,27 @@ public class BlogPostProcessor {
         this.publisher = publisher;
     }
 
+    public void delete(Integer postId) {
+        Map<String, Integer> wordCountDelta = repository.getWordCounts(postId);
+        wordCountDelta.forEach((key, value) -> wordCountDelta.put(key, -value));
+
+        repository.applyDelta(postId, wordCountDelta);
+
+        this.publisher.publishEvent(new WordCountUpdateEvent(this.repository.getWordCountsTotal()));
+    }
+
     public void process(Post post) {
         Map<String, Integer> wordCountDelta = repository.getWordCounts(post.id());
         wordCountDelta.forEach((key, value) -> wordCountDelta.put(key, -value));
 
-        String text = post.title() + " " + post.content();
+        String text = post.content();
         List<String> words = getWords(text);
 
         for(String w : words) {
             wordCountDelta.merge(w, 1, (c1, c2) -> c1 + 1);
         }
 
-        repository.applyDelta(post, wordCountDelta);
+        repository.applyDelta(post.id(), wordCountDelta);
 
         this.publisher.publishEvent(new WordCountUpdateEvent(this.repository.getWordCountsTotal()));
     }

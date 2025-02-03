@@ -15,6 +15,7 @@ import org.springframework.web.reactive.socket.WebSocketMessage;
 import org.springframework.web.reactive.socket.server.support.WebSocketHandlerAdapter;
 import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.Collections;
 import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
@@ -52,6 +53,7 @@ public class WebSocketConfiguration {
 
         Flux<WordCountUpdateEvent> publish = Flux
                 .create(eventPublisher)
+                .sample(Duration.ofMillis(500))
                 .share();
 
         return session -> {

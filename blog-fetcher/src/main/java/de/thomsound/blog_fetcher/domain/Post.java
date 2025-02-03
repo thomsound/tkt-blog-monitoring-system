@@ -1,4 +1,4 @@
-package de.thomsound.blog_fetcher.model;
+package de.thomsound.blog_fetcher.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 

@@ -15,6 +15,7 @@ import java.util.function.Consumer;
 public class WordCountUpdatePublisher implements ApplicationListener<WordCountUpdateEvent>, Consumer<FluxSink<WordCountUpdateEvent>> {
 
     private final Executor executor;
+
     private final BlockingQueue<WordCountUpdateEvent> queue = new LinkedBlockingQueue<>();
 
     public WordCountUpdatePublisher(Executor executor) {

@@ -24,8 +24,6 @@ public class WordCountUpdateConsumer {
     public void consume(Map<String, Integer> wordCounts) {
 
         publisher.publishEvent(new WordCountUpdateEvent(wordCounts));
-
-        logger.info(String.format("Consumed message -> Total word counts:\n%s", wordCounts.toString()));
     }
 
 }
