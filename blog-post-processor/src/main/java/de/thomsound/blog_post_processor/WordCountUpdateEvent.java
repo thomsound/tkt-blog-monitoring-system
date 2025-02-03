@@ -4,9 +4,9 @@ import org.springframework.context.ApplicationEvent;
 
 import java.util.Map;
 
-public class WordCountUpdatedEvent extends ApplicationEvent {
+public class WordCountUpdateEvent extends ApplicationEvent {
 
-    public WordCountUpdatedEvent(Map<String, Integer> source) {
+    public WordCountUpdateEvent(Map<String, Integer> source) {
         super(source);
     }
 }

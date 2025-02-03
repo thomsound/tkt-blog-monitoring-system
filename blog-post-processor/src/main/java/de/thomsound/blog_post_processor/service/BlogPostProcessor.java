@@ -1,6 +1,6 @@
 package de.thomsound.blog_post_processor.service;
 
-import de.thomsound.blog_post_processor.WordCountUpdatedEvent;
+import de.thomsound.blog_post_processor.WordCountUpdateEvent;
 import de.thomsound.blog_post_processor.model.Post;
 import de.thomsound.blog_post_processor.repository.WordCountRepository;
 import org.springframework.context.ApplicationEventPublisher;
@@ -36,7 +36,7 @@ public class BlogPostProcessor {
 
         repository.applyDelta(post, wordCountDelta);
 
-        this.publisher.publishEvent(new WordCountUpdatedEvent(this.repository.getWordCountsTotal()));
+        this.publisher.publishEvent(new WordCountUpdateEvent(this.repository.getWordCountsTotal()));
     }
 
     private static List<String> getWords(String text) {

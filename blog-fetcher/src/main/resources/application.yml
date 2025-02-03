@@ -11,5 +11,6 @@ spring:
       value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
 
 app:
+#  TODO: set correct base-url
   blog-base-url: https://224f0437-be05-466e-ae23-de9090fd3b65.mock.pstmn.io
   polling-interval-millis: 10000

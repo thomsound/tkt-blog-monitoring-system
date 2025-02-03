@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <title>TKT Blog Post Monitor</title>
+    <style>
+        #loading-indicator {
+            opacity: 1;
+        }
+
+        @keyframes fade-out {
+            from {
+                opacity: 1;
+            }
+            to {
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+<h1>TKT Blog Post Monitor</h1>
+<h2>Total Word Counts</h2>
+<div id="loading-indicator">LOADING</div>
+<div id="word-counts-list"></div>
+<script>
+
+    var socket = new WebSocket('ws://localhost:8080/ws/word-counts');
+
+    var data = null;
+
+    socket.addEventListener('message', function (event) {
+      document.getElementById('word-counts-list').innerText = event.data;
+      data = event.data;
+      indicateLoading();
+    });
+
+    function indicateLoading() {
+        let element = document.getElementById("loading-indicator");
+        element.style.animation = "none";
+        void element.offsetWidth;
+        element.style.animation = "fade-out 2s forwards";
+}
+</script>
+</body>
+</html>
