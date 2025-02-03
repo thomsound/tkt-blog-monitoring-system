@@ -10,11 +10,14 @@ import java.io.IOException;
 
 @Service
 public class BlogPostUpdateConsumer {
-    private final Logger logger = LoggerFactory.getLogger(BlogPostUpdateConsumer.class);
+    private final BlogPostProcessor processor;
+
+    public BlogPostUpdateConsumer(BlogPostProcessor processor) {
+        this.processor = processor;
+    }
 
     @KafkaListener(topics = "${spring.kafka.topic-name-blog-post-updates}", groupId = "group_id")
-
     public void consume(Post post) throws IOException {
-        logger.info(String.format("#### -> Consumed message -> [%s]: %s\n%s", post.modified_gmt(), post.id(), post.title()));
+        processor.process(post);
     }
 }

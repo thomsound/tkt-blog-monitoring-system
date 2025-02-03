@@ -3,6 +3,7 @@ spring:
 
   kafka:
     topic-name-blog-post-updates: blog-post-updates
+    topic-name-word-count-updates: word-count-updates
 
     consumer:
       bootstrap-servers: localhost:9092
@@ -17,4 +18,4 @@ spring:
     producer:
       bootstrap-servers: localhost:9092
       key-serializer: org.apache.kafka.common.serialization.StringSerializer
-      value-serializer: org.apache.kafka.common.serialization.StringSerializer
+      value-serializer: org.springframework.kafka.support.serializer.JsonSerializer
