@@ -21,26 +21,30 @@
 <body>
 <h1>TKT Blog Post Monitor</h1>
 <h2>Total Word Counts</h2>
-<div id="loading-indicator">LOADING</div>
+<div id="loading-indicator">UPDATING</div>
 <div id="word-counts-list"></div>
 <script>
 
     var socket = new WebSocket('ws://localhost:8080/ws/word-counts');
 
-    var data = null;
-
     socket.addEventListener('message', function (event) {
-      document.getElementById('word-counts-list').innerText = event.data;
-      data = event.data;
+      renderWordCounts(event.data);
       indicateLoading();
     });
+
+    var dataSorted;
+
+    function renderWordCounts(jsonString) {
+      dataSorted = new Map(Object.entries(JSON.parse(jsonString)).sort(([keyA], [keyB]) => keyA.localeCompare(keyB)));
+      document.getElementById('word-counts-list').innerText = [...dataSorted.entries()].map(([key, value]) => `${key}: ${value}`).join("\n");;
+    }
 
     function indicateLoading() {
         let element = document.getElementById("loading-indicator");
         element.style.animation = "none";
         void element.offsetWidth;
         element.style.animation = "fade-out 2s forwards";
-}
+    }
 </script>
 </body>
 </html>
