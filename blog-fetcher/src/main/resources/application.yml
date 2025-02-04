@@ -14,3 +14,12 @@ app:
   blog-base-url: https://thekey.academy
   update-interval-millis: 10000
   delete-interval-millis: 60000
+
+---
+
+spring:
+  config:
+    activate:
+      on-profile: docker
+  kafka:
+    bootstrap-servers: kafka:9092
