@@ -67,10 +67,7 @@ public class WebSocketConfiguration {
                             throw new RuntimeException(e);
                         }
                     })
-                    .map(str -> {
-                        log.info("sending " + str);
-                        return session.textMessage(str);
-                    });
+                    .map(session::textMessage);
 
             return session.send(messageFlux);
         };

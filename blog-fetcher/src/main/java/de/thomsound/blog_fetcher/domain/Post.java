@@ -2,9 +2,7 @@ package de.thomsound.blog_fetcher.domain;
 
 import com.fasterxml.jackson.annotation.JsonGetter;
 
-import java.util.Date;
-
-public record Post(int id, Date modified_gmt, Title title, Content content) {
+public record Post(int id, Title title, Content content) {
 
     @JsonGetter("title")
     public String titleText() {

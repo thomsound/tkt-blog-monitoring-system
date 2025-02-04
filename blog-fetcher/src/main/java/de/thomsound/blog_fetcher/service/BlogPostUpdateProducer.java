@@ -15,15 +15,19 @@ public class BlogPostUpdateProducer {
 
     private static final Logger log = LoggerFactory.getLogger(BlogPostUpdateProducer.class);
 
-    @Value("${spring.kafka.topic-name-blog-post-updates}")
-    private String topicName;
 
     private final KafkaTemplate<String, Message> kafkaTemplate;
+    private final String topicName;
 
     private final BlogPostFetcher blogPostFetcher;
 
-    public BlogPostUpdateProducer(KafkaTemplate<String, Message> kafkaTemplate, BlogPostFetcher blogPostFetcher) {
+    public BlogPostUpdateProducer(
+            @Value("${spring.kafka.topic-name-blog-post-updates}") String topicName,
+            KafkaTemplate<String, Message> kafkaTemplate,
+            BlogPostFetcher blogPostFetcher
+    ) {
         this.kafkaTemplate = kafkaTemplate;
+        this.topicName = topicName;
         this.blogPostFetcher = blogPostFetcher;
     }
 
@@ -43,7 +47,7 @@ public class BlogPostUpdateProducer {
                 .blockLast();
     }
 
-    public void sendMessage(Message msg) {
+    private void sendMessage(Message msg) {
         this.kafkaTemplate.send(topicName, msg);
     }
 

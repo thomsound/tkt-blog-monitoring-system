@@ -1,5 +1,7 @@
 package de.thomsound.blog_fetcher.model;
 
+import java.util.Objects;
+
 public abstract class Message {
     private MessageType type;
     private Integer postId;
@@ -23,5 +25,17 @@ public abstract class Message {
 
     public void setPostId(Integer postId) {
         this.postId = postId;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (!(o instanceof Message message)) return false;
+        return getType() == message.getType() && Objects.equals(getPostId(), message.getPostId());
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(getType(), getPostId());
     }
 }
