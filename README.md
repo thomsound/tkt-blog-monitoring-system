@@ -2,7 +2,26 @@
 
 # Blog-Post Monitoring System
 
-## Run
+Meine Lösung besteht aus drei Services, die über Kafka miteinander Kommunizieren.
+
+### blog-fetcher
+Der blog-fetcher-Service sendet regelmäßige Poll-Requests an die Wordpress API und soll was auf dem Blog passiert in einen Eventstream überführen.
+Über das Feld `modified_gmt` werden `Updates` und `Creates` getrackt und über `UpdateMessages` kommuniziert.
+Zusätzlich wird regelmäßig überprüft, ob noch alle bekannten Posts vorhanden sind, um ggfs. eine `DeleteMessage` abzusetzen.
+Auf diese Weise werden keine redundanten Events in das System gegeben.
+
+Der Einfachheit halber beinhalten die `UpdateMessage`s bereits den Inhalt der Posts. In einem größeren System würden sie lediglich alle Kafka-Consumer über ein Update informieren, so dass diese dann jeweils den Teil der Daten laden, den sie für ihre Aufgabe benötigen.
+
+### blog-post-processor
+Dieser Service verarbeitet den Textinhalt der Posts zu einer Word-Count-Map. Dabei werden immer nur die Unterschiede neu berechnet, so dass der Total-Count (die Wortanzahl über alle Posts) nicht immer komplett neu berechnet werden muss.
+Das Ergebnis wird dann wieder über Kafka an den `web-socket-server` kommuniziert.
+
+### web-socket-server
+Dieser Frontendserver ist von außen erreichbar. Er stellt einen simplen Browser-Client über Http zur Verfügung und verwaltet die Websocket-Verbindungen zu allen Clients, die darüber aufgebaut werden.
+
+Hier wird der letzte State lediglich in einer Variable im Speicher gehalten, um jedem Client, der sich neu verbindet, die aktuellen Daten liefern zu können. Im Ernstfall könnte dieser Service sich die Daten natürlich erneut zusenden lassen um z.B. auch nach einem Neustart weiterhin konsistente Daten zu liefen.
+
+## Run ...
 
 > Alle Befehle werden aus dem Verzeichnis `tkt-blog-monitoring-system` heraus ausgeführt.
 
@@ -25,13 +44,13 @@ Starten der einzelnen Services:
 
 ### Client
 
-Das (sehr basale) Frontend ist dann unter [localhost:8080/client.html](localhost:8080/client.html) zu erreichen.
+Das (sehr basale) Frontend ist dann unter <b>[localhost:8080/client.html](localhost:8080/client.html)</b> zu erreichen.
 
 ## Tests
 
+Tests existieren beispielhaft für den `blog-fetcher`-Service.
+
 ```./mvnw test```
-
-
 
 ## Aufgabe:
 
