@@ -1,3 +1,5 @@
+(This repository was made public at the request of The Key Technology)
+
 # The Key Technology Coding Assessment
 
 # Blog-Post Monitoring System
