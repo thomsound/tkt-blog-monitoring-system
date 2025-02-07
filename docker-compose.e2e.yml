@@ -1,0 +1,11 @@
+services:
+  blog-fetcher:
+    environment:
+      - APP_BLOG_BASE_URL=${TKA_MOCKSERVER_BASE_URL}
+      - APP_UPDATE_INTERVAL_MILLIS=5000
+      - APP_DELETE_INTERVAL_MILLIS=12000
+
+networks:
+  internal_network:
+    name: e2e-test-network
+    driver: bridge

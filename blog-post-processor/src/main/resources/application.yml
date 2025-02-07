@@ -13,7 +13,7 @@ spring:
       value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
       properties:
         spring.json.trusted.packages: "de.thomsound.*"
-        spring.json.type.mapping: "de.thomsound.blog_fetcher.model.UpdateMessage:de.thomsound.blog_post_processor.model.UpdateMessage"
+        spring.json.type.mapping: "de.thomsound.blog_fetcher.model.UpdateMessage:de.thomsound.blog_post_processor.model.UpdateMessage,de.thomsound.blog_fetcher.model.DeleteMessage:de.thomsound.blog_post_processor.model.DeleteMessage"
 
     producer:
       bootstrap-servers: localhost:9092

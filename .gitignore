@@ -34,3 +34,6 @@ build/
 
 ### Secret ###
 application-secrets.*
+
+
+.DS_Store

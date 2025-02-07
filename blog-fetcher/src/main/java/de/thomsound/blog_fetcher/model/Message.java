@@ -11,6 +11,9 @@ public abstract class Message {
         this.postId = postId;
     }
 
+    public Message() {
+    }
+
     public MessageType getType() {
         return type;
     }

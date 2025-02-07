@@ -54,6 +54,18 @@ Tests existieren beispielhaft für den `blog-fetcher`-Service.
 
 ```./mvnw test```
 
+## End-to-end Tests
+
+Dieser Test startet das komplette System und einen Mockserver, der die third-party API simuliert, in Docker um dann via Selenium zu prüfen ob das gewünschte Ergebnis angezeigt wird.
+
+```
+# Alle module packen (falls noch nicht geschehen)
+./mvnw package -DskipTests
+
+# End-to-end Test starten
+./mvnw test -P e2e
+```
+
 ## Aufgabe:
 
 ### Erstelle ein Full Stack System mit folgenden Anforderungen:
